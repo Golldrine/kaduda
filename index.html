@@ -426,6 +426,80 @@
     </style>
 </head>
 <body>
+<!--SDk-->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+        import { getFirestore, collection, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBwyKcNUMuo7ISxTrCWwgb_638trjWHcJM",
+          authDomain: "kaduda-cb58a.firebaseapp.com",
+          projectId: "kaduda-cb58a",
+          storageBucket: "kaduda-cb58a.appspot.com",
+          messagingSenderId: "947486075890",
+          appId: "1:947486075890:web:e2546a6651d4886d30d96b",
+          measurementId: "G-GEV7QQ5J8D"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app); // Inicializa o Firestore
+      
+        // Função para reservar presentes
+        const giftCards = document.querySelectorAll('.gift-card');
+        giftCards.forEach(giftCard => {
+            const selectButton = giftCard.querySelector('.select-button');
+      
+            selectButton.addEventListener('click', async () => {
+                selectButton.disabled = true;
+                selectButton.textContent = 'Reservado';
+      
+                // Obtém o ID do presente
+                const itemId = giftCard.dataset.itemId;
+      
+                try {
+                    // Armazena a seleção no Firestore
+                    await setDoc(doc(db, 'reservas', itemId), {
+                        reservado: true
+                    });
+                    console.log('Reserva armazenada com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao armazenar reserva: ', error);
+                    alert('Falha ao reservar o presente.');
+                }
+            });
+        });
+      
+        // Função para carregar o status dos itens
+        async function carregarStatusItens() {
+            try {
+                const snapshot = await getDocs(collection(db, 'reservas'));
+                snapshot.forEach((doc) => {
+                    const itemId = doc.id;
+                    const itemData = doc.data();
+      
+                    const giftCard = document.querySelector(`.gift-card[data-item-id="${itemId}"]`);
+                    if (giftCard) {
+                        const selectButton = giftCard.querySelector('.select-button');
+                        if (itemData.reservado) {
+                            selectButton.disabled = true;
+                            selectButton.textContent = 'Reservado';
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Erro ao carregar status dos itens: ', error);
+            }
+        }
+      
+        // Chama a função para carregar o status ao carregar a página
+        carregarStatusItens();
+      </script>
+    <!--fim-->
     <div class="header">
         <h1>Chá de Panela - KaDuda</h1>
         <p>Junte-se a nós para celebrar!</p>
