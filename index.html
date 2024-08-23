@@ -1198,98 +1198,99 @@
     </div>
 
    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Função para a contagem regressiva
-            function countdownTimer() {
-                const eventDate = new Date("September 7, 2024 17:00:00").getTime();
-                const now = new Date().getTime();
-                const timeLeft = eventDate - now;
-    
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-    
-                document.getElementById("countdown").innerHTML = 
-                    days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-    
-                if (timeLeft < 0) {
-                    clearInterval(countdown);
-                    document.getElementById("countdown").innerHTML = "O grande dia chegou!";
+    document.addEventListener('DOMContentLoaded', function() {
+        // Função para a contagem regressiva
+        function countdownTimer() {
+            const eventDate = new Date("September 7, 2024 17:00:00").getTime();
+            const now = new Date().getTime();
+            const timeLeft = eventDate - now;
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = 
+                days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+            if (timeLeft < 0) {
+                clearInterval(countdown);
+                document.getElementById("countdown").innerHTML = "O grande dia chegou!";
+            }
+        }
+
+        // Atualiza a contagem regressiva a cada segundo
+        const countdown = setInterval(countdownTimer, 1000);
+
+        // Número do WhatsApp para onde enviar a mensagem
+        const whatsappNumber = "5561996223965"; // Número atualizado
+
+        // Lista de presentes com nomes genéricos
+        const giftNames = {};
+        for (let i = 1; i <= 54; i++) {
+            giftNames[i] = `Presente ${i}`; // Nome genérico para os presentes
+        }
+
+        // Função para reservar presentes
+        const giftCards = document.querySelectorAll('.gift-card');
+        giftCards.forEach(giftCard => {
+            const selectButton = giftCard.querySelector('.select-button');
+            const giftId = giftCard.getAttribute('data-id'); // ID do presente
+
+            selectButton.addEventListener('click', () => {
+                const giftName = giftNames[giftId] || "Presente Desconhecido";
+                const whatsappMessage = `Olá! Eu gostaria de reservar o presente: ${giftName}.`;
+                const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+                window.open(whatsappURL, '_blank');
+            });
+        });
+
+        // Função para detectar quando uma seção está visível e reiniciar a animação
+        function handleScroll() {
+            const sections = document.querySelectorAll('.section, .countdown, .gallery');
+            const windowHeight = window.innerHeight;
+
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const sectionVisible = 150; // Ajuste a altura para o disparo da animação
+
+                if (sectionTop < windowHeight - sectionVisible) {
+                    section.classList.add('visible');
+                } else {
+                    section.classList.remove('visible'); // Remove a classe quando fora da vista
                 }
-            }
-    
-            // Atualiza a contagem regressiva a cada segundo
-            const countdown = setInterval(countdownTimer, 1000);
-    
-            // Número do WhatsApp para onde enviar a mensagem
-            const whatsappNumber = "5561996223965"; // Número atualizado
-    
-            // Lista de presentes com nomes genéricos
-            const giftNames = {};
-            for (let i = 1; i <= 54; i++) {
-                giftNames[i] = `Presente ${i}`; // Nome genérico para os presentes
-            }
-    
-            // Função para reservar presentes
-            const giftCards = document.querySelectorAll('.gift-card');
-            giftCards.forEach(giftCard => {
-                const selectButton = giftCard.querySelector('.select-button');
-                const giftId = giftCard.getAttribute('data-id'); // ID do presente
-    
-                selectButton.addEventListener('click', () => {
-                    const giftName = giftNames[giftId] || "Presente Desconhecido";
-                    const whatsappMessage = `Olá! Eu gostaria de reservar o presente: ${giftName}.`;
-                    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-                    window.open(whatsappURL, '_blank');
-                });
             });
-    
-            // Função para detectar quando uma seção está visível e reiniciar a animação
-            function handleScroll() {
-                const sections = document.querySelectorAll('.section, .countdown, .gallery');
-                const windowHeight = window.innerHeight;
-    
-                sections.forEach(section => {
-                    const sectionTop = section.getBoundingClientRect().top;
-                    const sectionVisible = 150; // Ajuste a altura para o disparo da animação
-    
-                    if (sectionTop < windowHeight - sectionVisible) {
-                        section.classList.add('visible');
-                    } else {
-                        section.classList.remove('visible'); // Remove a classe quando fora da vista
-                    }
-                });
-            }
-    
-            window.addEventListener('scroll', handleScroll);
-            window.addEventListener('load', handleScroll); // Garante a animação ao carregar a página
-        });
-    
-        // Função para abrir o modal com a imagem ampliada
-        function openModal(imageSrc) {
-            document.getElementById("modal-image").src = imageSrc;
-            document.getElementById("image-modal").style.display = "block";
         }
-    
-        // Função para fechar o modal
-        function closeModal() {
-            document.getElementById("image-modal").style.display = "none";
-        }
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            const copyButton = document.getElementById('copy-pix-button');
-            const pixKeyText = document.getElementById('pix-key-text').innerText;
-            const feedback = document.getElementById('copy-feedback');
-    
-            copyButton.addEventListener('click', function() {
-                navigator.clipboard.writeText(pixKeyText).then(() => {
-                    feedback.textContent = 'Chave PIX copiada com sucesso!';
-                }).catch(err => {
-                    feedback.textContent = 'Erro ao copiar a chave PIX.';
-                });
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', handleScroll); // Garante a animação ao carregar a página
+    });
+
+    // Função para abrir o modal com a imagem ampliada
+    function openModal(imageSrc) {
+        document.getElementById("modal-image").src = imageSrc;
+        document.getElementById("image-modal").style.display = "block";
+    }
+
+    // Função para fechar o modal
+    function closeModal() {
+        document.getElementById("image-modal").style.display = "none";
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const copyButton = document.getElementById('copy-pix-button');
+        const pixKeyText = document.getElementById('pix-key-text').innerText;
+        const feedback = document.getElementById('copy-feedback');
+
+        copyButton.addEventListener('click', function() {
+            navigator.clipboard.writeText(pixKeyText).then(() => {
+                feedback.textContent = 'Chave PIX copiada com sucesso!';
+            }).catch(err => {
+                feedback.textContent = 'Erro ao copiar a chave PIX.';
             });
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>
