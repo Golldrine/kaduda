@@ -1204,184 +1204,160 @@
       </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database.js"></script>
-    
-<script>
-      // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBgAD6BWjEVCvamUfvYMRJZSQws8WM0qho",
-    authDomain: "kaduda-2c981.firebaseapp.com",
-    databaseURL: "https://kaduda-2c981-default-rtdb.firebaseio.com/",
-    projectId: "kaduda-2c981",
-    storageBucket: "kaduda-2c981.appspot.com",
-    messagingSenderId: "98405052296",
-    appId: "1:98405052296:web:4459a3ec550a66b585543d"
-  };
-    
+    <!-- Adicione os scripts do Firebase antes do seu script -->
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+
+    <script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyBgAD6BWjEVCvamUfvYMRJZSQws8WM0qho",
+        authDomain: "kaduda-2c981.firebaseapp.com",
+        databaseURL: "https://kaduda-2c981-default-rtdb.firebaseio.com/",
+        projectId: "kaduda-2c981",
+        storageBucket: "kaduda-2c981.appspot.com",
+        messagingSenderId: "98405052296",
+        appId: "1:98405052296:web:4459a3ec550a66b585543d"
+    };
+    // Inicializa o Firebase
+    firebase.initializeApp(firebaseConfig);
+
     document.addEventListener('DOMContentLoaded', function() {
-      // Função para a contagem regressiva
-      function countdownTimer() {
-          const eventDate = new Date("September 7, 2024 17:00:00").getTime();
-          const now = new Date().getTime();
-          const timeLeft = eventDate - now;
-  
-          const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-  
-          document.getElementById("countdown").innerHTML = 
-              days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-  
-          if (timeLeft < 0) {
-              clearInterval(countdown);
-              document.getElementById("countdown").innerHTML = "O grande dia chegou!";
-          }
-      }
-  
-      // Atualiza a contagem regressiva a cada segundo
-      const countdown = setInterval(countdownTimer, 1000);
-  
-      // Função para reservar presentes
-      const giftCards = document.querySelectorAll('.gift-card');
-      giftCards.forEach(giftCard => {
-          const selectButton = giftCard.querySelector('.select-button');
-          selectButton.addEventListener('click', () => {
-              selectButton.disabled = true;
-              selectButton.textContent = 'Reservado';
-              // Aqui, você pode adicionar a lógica para armazenar a seleção em um banco de dados ou backend.
-          });
-      });
-  
-      // Função para detectar quando uma seção está visível e reiniciar a animação
-      function handleScroll() {
-          const sections = document.querySelectorAll('.section, .countdown, .gallery');
-          const windowHeight = window.innerHeight;
-  
-          sections.forEach(section => {
-              const sectionTop = section.getBoundingClientRect().top;
-              const sectionVisible = 150; // Ajuste a altura para o disparo da animação
-  
-              if (sectionTop < windowHeight - sectionVisible) {
-                  section.classList.add('visible');
-              } else {
-                  section.classList.remove('visible'); // Remove a classe quando fora da vista
-              }
-          });
-      }
-  
-      window.addEventListener('scroll', handleScroll);
-      window.addEventListener('load', handleScroll); // Garante a animação ao carregar a página
-  });
+        // Função para a contagem regressiva
+        function countdownTimer() {
+            const eventDate = new Date("September 7, 2024 17:00:00").getTime();
+            const now = new Date().getTime();
+            const timeLeft = eventDate - now;
 
-  // Função para abrir o modal com a imagem ampliada
-function openModal(imageSrc) {
-    document.getElementById("modal-image").src = imageSrc;
-    document.getElementById("image-modal").style.display = "block";
-}
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-// Função para fechar o modal
-function closeModal() {
-    document.getElementById("image-modal").style.display = "none";
-}
+            document.getElementById("countdown").innerHTML =
+                days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
 
-    // Função para abrir o modal de imagem
-    function openModal(imageSrc) {
-        document.getElementById("modal-image").src = imageSrc;
-        document.getElementById("image-modal").style.display = "block";
-    }
+            if (timeLeft < 0) {
+                clearInterval(countdown);
+                document.getElementById("countdown").innerHTML = "O grande dia chegou!";
+            }
+        }
 
-    // Função para fechar o modal de imagem
-    function closeModal() {
-        document.getElementById("image-modal").style.display = "none";
-    }
-    
-// Pix
-    document.addEventListener('DOMContentLoaded', function() {
-    const copyButton = document.getElementById('copy-pix-button');
-    const pixKeyText = document.getElementById('pix-key-text').innerText;
-    const feedback = document.getElementById('copy-feedback');
+        // Atualiza a contagem regressiva a cada segundo
+        const countdown = setInterval(countdownTimer, 1000);
 
-    copyButton.addEventListener('click', function() {
-        navigator.clipboard.writeText(pixKeyText).then(() => {
-            feedback.textContent = 'Chave PIX copiada com sucesso!';
-        }).catch(err => {
-            feedback.textContent = 'Erro ao copiar a chave PIX.';
+        // Inicializa os conjuntos de presentes selecionados e reservados
+        const selectedGifts = new Set();
+        const reservedGifts = new Set();
+
+        // Função para atualizar a interface do usuário
+        function updateUI() {
+            document.querySelectorAll('.gift-card').forEach(giftCard => {
+                const giftId = giftCard.getAttribute('data-id');
+                const selectButton = giftCard.querySelector('.select-button');
+                const isSelected = selectedGifts.has(giftId);
+                const isReserved = reservedGifts.has(giftId);
+
+                giftCard.classList.toggle('selected', isSelected);
+                giftCard.classList.toggle('reserved', isReserved);
+                selectButton.disabled = isReserved;
+                selectButton.textContent = isReserved ? 'Reservado' : (isSelected ? 'Desmarcar' : 'Selecionar');
+            });
+            document.getElementById('item-count').innerText = selectedGifts.size;
+            document.getElementById('floating-confirm').style.display = selectedGifts.size > 0 ? 'flex' : 'none';
+        }
+
+        // Função para carregar as reservas do Firebase
+        function loadReservations() {
+            firebase.database().ref('reservations').once('value').then(snapshot => {
+                const reservations = snapshot.val() || {};
+                Object.keys(reservations).forEach(giftId => {
+                    if (reservations[giftId].reserved) {
+                        reservedGifts.add(giftId);
+                    }
+                });
+                updateUI();
+            });
+        }
+
+        // Carrega as reservas quando o documento é carregado
+        loadReservations();
+
+        // Adiciona um evento de clique para os botões de seleção de presentes
+        document.querySelectorAll('.select-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const giftId = this.closest('.gift-card').getAttribute('data-id');
+                if (selectedGifts.has(giftId)) {
+                    selectedGifts.delete(giftId);
+                } else {
+                    selectedGifts.add(giftId);
+                }
+                updateUI();
+            });
         });
+
+        // Adiciona um evento de clique para o botão de confirmação
+        document.getElementById('confirm-button').addEventListener('click', function() {
+            selectedGifts.forEach(giftId => {
+                firebase.database().ref('reservations/' + giftId).set({
+                    reserved: true
+                });
+                reservedGifts.add(giftId);
+            });
+            selectedGifts.clear();
+            updateUI();
+        });
+
+        // Adiciona um evento de clique para o botão de limpar seleção
+        document.getElementById('clear-button').addEventListener('click', function() {
+            selectedGifts.clear();
+            updateUI();
+        });
+
+        // Função para abrir o modal com a imagem ampliada
+        function openModal(imageSrc) {
+            document.getElementById("modal-image").src = imageSrc;
+            document.getElementById("image-modal").style.display = "block";
+        }
+
+        // Função para fechar o modal
+        function closeModal() {
+            document.getElementById("image-modal").style.display = "none";
+        }
+
+        // Copiar chave PIX para a área de transferência
+        const copyButton = document.getElementById('copy-pix-button');
+        const pixKeyText = document.getElementById('pix-key-text').innerText;
+        const feedback = document.getElementById('copy-feedback');
+
+        copyButton.addEventListener('click', function() {
+            navigator.clipboard.writeText(pixKeyText).then(() => {
+                feedback.textContent = 'Chave PIX copiada com sucesso!';
+            }).catch(err => {
+                feedback.textContent = 'Erro ao copiar a chave PIX.';
+            });
+        });
+
+        // Função para detectar quando uma seção está visível e reiniciar a animação
+        function handleScroll() {
+            const sections = document.querySelectorAll('.section, .countdown, .gallery');
+            const windowHeight = window.innerHeight;
+
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const sectionVisible = 150; // Ajuste a altura para o disparo da animação
+
+                if (sectionTop < windowHeight - sectionVisible) {
+                    section.classList.add('visible');
+                } else {
+                    section.classList.remove('visible'); // Remove a classe quando fora da vista
+                }
+            });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', handleScroll); // Garante a animação ao carregar a página
     });
-});
-
-    // NOVO
-    document.addEventListener('DOMContentLoaded', function() {
-     // Inicializa os conjuntos de presentes selecionados e reservados
-     const selectedGifts = new Set();
-     const reservedGifts = new Set();
-
-     // Função para atualizar a interface do usuário
-     function updateUI() {
-         document.querySelectorAll('.gift-card').forEach(giftCard => {
-             const giftId = giftCard.getAttribute('data-id');
-             const selectButton = giftCard.querySelector('.select-button');
-             const isSelected = selectedGifts.has(giftId);
-             const isReserved = reservedGifts.has(giftId);
-
-             giftCard.classList.toggle('selected', isSelected);
-             giftCard.classList.toggle('reserved', isReserved);
-             selectButton.disabled = isReserved;
-             selectButton.textContent = isReserved ? 'Reservado' : (isSelected ? 'Desmarcar' : 'Selecionar');
-         });
-         document.getElementById('item-count').innerText = selectedGifts.size;
-         document.getElementById('floating-confirm').style.display = selectedGifts.size > 0 ? 'flex' : 'none';
-     }
-
-     // Função para carregar as reservas do Firebase
-     function loadReservations() {
-         firebase.database().ref('reservations').once('value').then((snapshot) => {
-             const reservations = snapshot.val() || {};
-             Object.keys(reservations).forEach(giftId => {
-                 if (reservations[giftId].reserved) {
-                     reservedGifts.add(giftId);
-                 }
-             });
-             updateUI();
-         });
-     }
-
-     // Carrega as reservas quando o documento é carregado
-     loadReservations();
-
-     // Adiciona um evento de clique para os botões de seleção de presentes
-     document.querySelectorAll('.select-button').forEach(button => {
-         button.addEventListener('click', function() {
-             const giftId = this.closest('.gift-card').getAttribute('data-id');
-             if (selectedGifts.has(giftId)) {
-                 selectedGifts.delete(giftId);
-             } else {
-                 selectedGifts.add(giftId);
-             }
-             updateUI();
-         });
-     });
-
-     // Adiciona um evento de clique para o botão de confirmação
-     document.getElementById('confirm-button').addEventListener('click', function() {
-         selectedGifts.forEach(giftId => {
-             firebase.database().ref('reservations/' + giftId).set({
-                 reserved: true
-             });
-             reservedGifts.add(giftId);
-         });
-         selectedGifts.clear();
-         updateUI();
-     });
-
-     // Adiciona um evento de clique para o botão de limpar seleção
-     document.getElementById('clear-button').addEventListener('click', function() {
-         selectedGifts.clear();
-         updateUI();
-     });
- });
 </script>
   
 </body>
