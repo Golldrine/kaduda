@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/png" href="logo.jpg">
+    
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -426,89 +427,6 @@
     </style>
 </head>
 <body>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
-  import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBwyKcNUMuo7ISxTrCWwgb_638trjWHcJM",
-    authDomain: "kaduda-cb58a.firebaseapp.com",
-    projectId: "kaduda-cb58a",
-    storageBucket: "kaduda-cb58a.appspot.com",
-    messagingSenderId: "947486075890",
-    appId: "1:947486075890:web:e2546a6651d4886d30d96b",
-    measurementId: "G-GEV7QQ5J8D"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const database = getDatabase(app); // Inicializa o Realtime Database
-
-  // Função para reservar presentes
-  const giftCards = document.querySelectorAll('.gift-card');
-  giftCards.forEach(giftCard => {
-      const selectButton = giftCard.querySelector('.select-button');
-
-      selectButton.addEventListener('click', async () => {
-          selectButton.disabled = true;
-          selectButton.textContent = 'Reservado';
-
-          // Obtém o ID do presente
-          const itemId = giftCard.dataset.itemId;
-
-          try {
-              // Armazena a seleção no Realtime Database
-              await set(ref(database, 'reservas/' + itemId), {
-                  reservado: true
-              });
-              console.log('Reserva armazenada com sucesso!');
-          } catch (error) {
-              console.error('Erro ao armazenar reserva: ', error);
-              alert('Falha ao reservar o presente.');
-          }
-      });
-  });
-
-  
-  async function carregarStatusItens() {
-      try {
-          const reservasRef = ref(database, 'reservas');
-          const snapshot = await get(reservasRef);
-
-          if (snapshot.exists()) {
-              snapshot.forEach(childSnapshot => {
-                  const itemId = childSnapshot.key;
-                  const itemData = childSnapshot.val();
-
-                  const giftCard = document.querySelector(`.gift-card[data-item-id="${itemId}"]`);
-                  if (giftCard) {
-                      const selectButton = giftCard.querySelector('.select-button');
-                      if (itemData.reservado) {
-                          selectButton.disabled = true;
-                          selectButton.textContent = 'Reservado';
-                      }
-                  }
-              });
-          } else {
-              console.log('Nenhuma reserva encontrada.');
-          }
-      } catch (error) {
-          console.error('Erro ao carregar status dos itens: ', error);
-      }
-  }
-
-  // Chama a função para carregar o status ao carregar a página
-  carregarStatusItens();
-</script>
-      
-        // Chama a função para carregar o status ao carregar a página
-        carregarStatusItens();
-      </script>
-    <!--fim-->
     <div class="header">
         <h1>Chá de Panela - KaDuda</h1>
         <p>Junte-se a nós para celebrar!</p>
@@ -1286,6 +1204,29 @@
       </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database.js"></script>
+
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBgAD6BWjEVCvamUfvYMRJZSQws8WM0qho",
+    authDomain: "kaduda-2c981.firebaseapp.com",
+    projectId: "kaduda-2c981",
+    storageBucket: "kaduda-2c981.appspot.com",
+    messagingSenderId: "98405052296",
+    appId: "1:98405052296:web:4459a3ec550a66b585543d"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
+    
 <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Função para a contagem regressiva
@@ -1354,63 +1295,6 @@ function closeModal() {
     document.getElementById("image-modal").style.display = "none";
 }
 
-// Inicialização do estado com localStorage
-document.addEventListener('DOMContentLoaded', function() {
-        // Inicializa os conjuntos de presentes selecionados e reservados
-        const selectedGifts = new Set(JSON.parse(localStorage.getItem('selectedGifts')) || []);
-        const reservedGifts = new Set(JSON.parse(localStorage.getItem('reservedGifts')) || []);
-
-        // Atualiza a interface do usuário com base nos conjuntos de presentes
-        function updateUI() {
-            document.querySelectorAll('.gift-card').forEach(giftCard => {
-                const giftId = giftCard.getAttribute('data-id');
-                const selectButton = giftCard.querySelector('.select-button');
-                const isSelected = selectedGifts.has(giftId);
-                const isReserved = reservedGifts.has(giftId);
-
-                giftCard.classList.toggle('selected', isSelected);
-                giftCard.classList.toggle('reserved', isReserved);
-                selectButton.disabled = isReserved;
-                selectButton.textContent = isReserved ? 'Reservado' : (isSelected ? 'Desmarcar' : 'Selecionar');
-            });
-            document.getElementById('item-count').innerText = selectedGifts.size;
-            document.getElementById('floating-confirm').style.display = selectedGifts.size > 0 ? 'flex' : 'none';
-        }
-
-        // Adiciona um evento de clique para os botões de seleção de presentes
-        document.querySelectorAll('.select-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const giftId = this.closest('.gift-card').getAttribute('data-id');
-                if (selectedGifts.has(giftId)) {
-                    selectedGifts.delete(giftId);
-                } else {
-                    selectedGifts.add(giftId);
-                }
-                localStorage.setItem('selectedGifts', JSON.stringify([...selectedGifts]));
-                updateUI();
-            });
-        });
-
-        // Adiciona um evento de clique para o botão de confirmação
-        document.getElementById('confirm-button').addEventListener('click', function() {
-            selectedGifts.forEach(giftId => reservedGifts.add(giftId));
-            localStorage.setItem('reservedGifts', JSON.stringify([...reservedGifts]));
-            selectedGifts.clear();
-            localStorage.setItem('selectedGifts', JSON.stringify([...selectedGifts]));
-            updateUI();
-        });
-
-        // Adiciona um evento de clique para o botão de limpar seleção
-        document.getElementById('clear-button').addEventListener('click', function() {
-            selectedGifts.clear();
-            localStorage.setItem('selectedGifts', JSON.stringify([...selectedGifts]));
-            updateUI();
-        });
-
-        // Inicializa a interface do usuário
-        updateUI();
-    });
-
     // Função para abrir o modal de imagem
     function openModal(imageSrc) {
         document.getElementById("modal-image").src = imageSrc;
@@ -1421,7 +1305,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function closeModal() {
         document.getElementById("image-modal").style.display = "none";
     }
-
+    
+// Pix
     document.addEventListener('DOMContentLoaded', function() {
     const copyButton = document.getElementById('copy-pix-button');
     const pixKeyText = document.getElementById('pix-key-text').innerText;
@@ -1436,6 +1321,76 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+    // NOVO
+    document.addEventListener('DOMContentLoaded', function() {
+     // Inicializa os conjuntos de presentes selecionados e reservados
+     const selectedGifts = new Set();
+     const reservedGifts = new Set();
+
+     // Função para atualizar a interface do usuário
+     function updateUI() {
+         document.querySelectorAll('.gift-card').forEach(giftCard => {
+             const giftId = giftCard.getAttribute('data-id');
+             const selectButton = giftCard.querySelector('.select-button');
+             const isSelected = selectedGifts.has(giftId);
+             const isReserved = reservedGifts.has(giftId);
+
+             giftCard.classList.toggle('selected', isSelected);
+             giftCard.classList.toggle('reserved', isReserved);
+             selectButton.disabled = isReserved;
+             selectButton.textContent = isReserved ? 'Reservado' : (isSelected ? 'Desmarcar' : 'Selecionar');
+         });
+         document.getElementById('item-count').innerText = selectedGifts.size;
+         document.getElementById('floating-confirm').style.display = selectedGifts.size > 0 ? 'flex' : 'none';
+     }
+
+     // Função para carregar as reservas do Firebase
+     function loadReservations() {
+         firebase.database().ref('reservations').once('value').then((snapshot) => {
+             const reservations = snapshot.val() || {};
+             Object.keys(reservations).forEach(giftId => {
+                 if (reservations[giftId].reserved) {
+                     reservedGifts.add(giftId);
+                 }
+             });
+             updateUI();
+         });
+     }
+
+     // Carrega as reservas quando o documento é carregado
+     loadReservations();
+
+     // Adiciona um evento de clique para os botões de seleção de presentes
+     document.querySelectorAll('.select-button').forEach(button => {
+         button.addEventListener('click', function() {
+             const giftId = this.closest('.gift-card').getAttribute('data-id');
+             if (selectedGifts.has(giftId)) {
+                 selectedGifts.delete(giftId);
+             } else {
+                 selectedGifts.add(giftId);
+             }
+             updateUI();
+         });
+     });
+
+     // Adiciona um evento de clique para o botão de confirmação
+     document.getElementById('confirm-button').addEventListener('click', function() {
+         selectedGifts.forEach(giftId => {
+             firebase.database().ref('reservations/' + giftId).set({
+                 reserved: true
+             });
+             reservedGifts.add(giftId);
+         });
+         selectedGifts.clear();
+         updateUI();
+     });
+
+     // Adiciona um evento de clique para o botão de limpar seleção
+     document.getElementById('clear-button').addEventListener('click', function() {
+         selectedGifts.clear();
+         updateUI();
+     });
+ });
 </script>
   
 </body>
